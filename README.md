@@ -1,65 +1,59 @@
-# Restaurant App MVP
+# Restaurant App MVP — Fall 2026
 
-Frontend-only React Native / Expo prototype for Fall 2026 Assignment 1.
+Frontend-only React Native / Expo MVP for Assignment 1.
 
-## Requirements
-- Node.js 20+ recommended
-- Expo Go on phone or an Android/iOS emulator
+## Mock credentials
+- Customer: `customer@restaurant.com` / `Customer123`
+- Manager: `manager@restaurant.com` / `Manager123`
 
-## Install & Run
-```bash
-npm install
-npx expo start
-```
-Scan the QR code with Expo Go, or press `a` for Android / `i` for iOS.
+## Installation
+1. Install Node.js 20 LTS or a compatible current LTS release.
+2. Run `npm install`.
+3. Run `npx expo start`.
+4. Scan the QR code with Expo Go, or open an Android/iOS emulator.
 
-## Demo Accounts
-| Role | Email | Password |
-|---|---|---|
-| Customer | customer@demo.com | Customer1 |
-| Manager | manager@demo.com | Manager1 |
+## Repository structure
+- `A1/SRS.pdf` — Software Requirements Specification.
+- `A1/UML/` — Use Case, Class, Sequence, State Machine and Component diagrams.
+- `src/components` — reusable UI components.
+- `src/screens` — application screens.
+- `src/context` — Auth, Theme, Cart and Orders contexts.
+- `src/reducers` — cart/order reducers.
+- `src/hooks` — useForm, useDebounce and useReservation.
+- `src/data` — local mock data.
+- `src/navigation` — nested stack/tab navigation.
 
-## Repository Structure
-- `A1/SRS.pdf` — Software Requirements Specification
-- `A1/UML/` — Use Case, Class, Sequence, State Machine and Component diagrams
-- `src/components` — reusable UI components
-- `src/screens` — app screens
-- `src/context` — Auth, Theme, Cart and Orders contexts
-- `src/reducers` — reducer logic
-- `src/hooks` — custom hooks
-- `src/data` — mock local data
-- `src/navigation` — stack and bottom-tab navigation
+## Context note
+Context is suitable for authentication, theme, cart and order state because these values are needed by multiple screens. It avoids passing the same values through many component layers (prop drilling). Providers keep related global state in one place. The custom consumer hooks also centralise provider validation. A drawback is that consumers can re-render when the context value changes, so context should not be used for every local state value.
 
-## Hook Coverage
-| Hook | Main screen/module |
+## Hook usage
+| Hook | Main screen/file |
 |---|---|
-| useState | Login, Menu, Reservation, Profile |
-| useEffect | Menu loading, Tracking timers, persistence |
-| useRef | Menu search/list/render counter |
+| useState | Login, Menu, Reservation |
+| useEffect | Menu, Orders, Tracking |
+| useRef | Menu search/list/debounce counter |
 | useContext | Auth, Theme, Cart, Orders |
 | useReducer | Cart and Orders |
-| useMemo | Menu filtering/sorting and Order Summary |
-| useCallback | Menu item handlers |
-| React.memo | MenuItemCard |
+| useMemo | Menu filtering, Order Summary |
+| useCallback | Menu handlers, reservation |
 | Custom hooks | useForm, useDebounce, useReservation |
+| React.memo | MenuItemCard |
 
-## Context vs Prop Drilling
-Context is suitable for authentication, theme, cart and orders because many screens need the same state. It avoids passing the same values through unrelated intermediate components. A drawback is that consumers can re-render when a context value changes, so context should be used for genuinely shared state.
-
-## useReducer vs useState
-The cart has several related transitions, so `useReducer` keeps actions and state changes centralized and predictable. A small independent value such as a search string is simpler with `useState`. `useState` would be enough for a cart with only one or two simple fields.
-
-## Demo Video
-Add the final screen-recording link here before submission.
-
-## Test Cases
-| Action | Initial State | Expected |
+## Cart reducer test cases
+| Action | Initial state | Expected |
 |---|---|---|
-| ADD_ITEM | empty | item quantity 1 |
-| ADD_ITEM same item | qty 1 | qty 2 |
+| ADD_ITEM | empty | one item quantity 1 |
+| ADD_ITEM | item qty 1 | same item qty 2 |
 | INCREMENT | qty 1 | qty 2 |
 | DECREMENT | qty 2 | qty 1 |
 | DECREMENT | qty 1 | item removed |
-| APPLY_PROMO | no promo | discount stored |
-| REMOVE_PROMO | promo active | discount 0 |
+| APPLY_PROMO | no promo | WELCOME10 gives 10% |
+| REMOVE_PROMO | 10% promo | 0% discount |
 | CLEAR_CART | items present | empty cart |
+
+## Demo video
+Record the complete flow in Expo Go (maximum 3 minutes) and paste the link here before submission:
+`[PASTE YOUR GOOGLE DRIVE / YOUTUBE UNLISTED LINK HERE]`
+
+## Important
+This is a frontend-only prototype. No backend, real payment gateway, push notification service, or external API is required.
